@@ -37,3 +37,8 @@ För att lägga upp filerna i vårt repo, så att de blir synliga i Github:
 ```git
 git push
 ```
+
+**När ni ska fortsätta att arbeta med projektet**
+```git
+git fetch && git pull
+```
