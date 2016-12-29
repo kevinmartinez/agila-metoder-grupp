@@ -2,14 +2,15 @@
 
 ## Grupp 18
 
-Kör kommando i terminalen för att skapa en kopia av projektet:
+Kör kommando i terminalen för att **skapa en kopia** av projektet:
 ```git
 git clone https://github.com/kevinmartinez/agila-metoder-grupp.git .
 ```
-Efter att ha klonat så kör detta i terminalen:
+Nästa kommando för att uppdatera remote tracking
 ```git
 git fetch
 ```
+git pull för att ladda ner alla ändringar som ligger uppe
 ```git
 git pull
 ```
@@ -28,7 +29,7 @@ För att kommentera ändringen
 ```git
 git commit -m "add new textfile"
 ```
-Se status igen, nu är det tomt
+Se status igen, nu har vi inga ändringar att lägga till, så det är tomt här
 ```git
 git status
 ```
