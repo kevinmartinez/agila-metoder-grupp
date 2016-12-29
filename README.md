@@ -19,7 +19,7 @@ Skapa sen en textfil.txt och kör
 ```git
 git status
 ```
-Nu ligger textfil.txt som untracked, vi kan skicka in den i vårt repo än
+Nu ligger textfil.txt som untracked, vi kan inte skicka in den i vårt repo än
 
 För att lägga till filen
 ```git
