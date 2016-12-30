@@ -6,8 +6,10 @@ Utveckla ett projekt i grupp med agila-metoder.
 
 ### Metodik
 
+> <br>
 > Scrum
 
+> <br>
 ### Verktyg
 > Vi har använt oss av Trello som Scrum-board
 >  + [Trello](https://www.trello.com)
