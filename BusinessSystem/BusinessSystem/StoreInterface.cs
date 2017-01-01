@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BusinessSystem
 {
-    // Class Store interface. Channel to Store class. ---
+    //--- Class Store interface. Channel to Store class. ---
     public class StoreInterface
     {
         public Store<Product> store = new Store<Product>();
