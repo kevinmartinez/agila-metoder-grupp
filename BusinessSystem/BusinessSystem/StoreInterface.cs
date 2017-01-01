@@ -9,7 +9,7 @@ namespace BusinessSystem
     // Class Store interface. Channel to Store class. ---
     public class StoreInterface
     {
-        Store<Product> store = new Store<Product>();
+        public Store<Product> store = new Store<Product>();
 
 
         //==============================================================================================
