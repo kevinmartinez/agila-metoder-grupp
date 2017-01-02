@@ -11,7 +11,8 @@ namespace BusinessSystem
     class BusinessSystemUi
     {
 
-        private Store<Product> Store = new Store<Product>();
+        //private Store<Product> Store = new Store<Product>();
+        private StoreInterface Store = new StoreInterface();
 
         public void StartApplication()
         {
@@ -98,73 +99,46 @@ namespace BusinessSystem
             }
         }
 
-        
-        private void SubMenu_7()
-        {
+        private void SubMenu_7() {
             Console.Clear();
             Console.WriteLine("Register a new product");
             Console.Write("Enter product number: ");
             string inputProductNumber = Console.ReadLine();
-            while (inputProductNumber == "")
-            {
+            while (inputProductNumber == "") {
                 Console.WriteLine("Product number cannot be empty. Enter a valid product number please: ");
                 inputProductNumber = Console.ReadLine();
             }
             Console.Write("Enter product name: ");
             string inputProductName = Console.ReadLine();
-            while (inputProductName == "")
-            {
+            while (inputProductName == "") {
                 Console.WriteLine("Product name cannot be empty. Enter a valid product name please: ");
                 inputProductName = Console.ReadLine();
             }
             Console.Write("Enter product price: ");
             string inputProductPrice = Console.ReadLine();
-            while (inputProductPrice == "")
-            {
+            while (inputProductPrice == "") {
                 Console.WriteLine("Product price cannot be empty. Enter a valid product price please: ");
                 inputProductPrice = Console.ReadLine();
             }
-            double productPrice;
-            try
-            {
-                productPrice = Convert.ToDouble(inputProductPrice);
-            }
-            catch (Exception exception)
-            {
-                //TODO: what to do if convertion fails
-                productPrice = 0;
-            }
             Console.Write("Enter product quantity: ");
             string inputProductQuantity = Console.ReadLine();
-            while (inputProductQuantity == "")
-            {
+            while (inputProductQuantity == "") {
                 Console.WriteLine("Product quantity cannot be empty. Enter a valid product quantity please: ");
                 inputProductQuantity = Console.ReadLine();
             }
-            int productQuantity;
-            try
+
+            var result = Store.AddProduct(inputProductNumber, inputProductName, inputProductPrice, inputProductQuantity);
+            if (result == "")
             {
-                productQuantity = Convert.ToInt32(inputProductQuantity);
-            }
-            catch (Exception exception)
-            {
-                //TODO: what to do if convertion fails
-                productQuantity = 0;
-            }
-            Product product = new Product(inputProductNumber, inputProductName, productPrice, productQuantity);
-            if (Store.AddProduct(product))
-            {
-                Console.WriteLine("The new product " + product.name + " was successfully added. Press enter to continue.");
-                Console.ReadLine();
+                Console.WriteLine("The new product " + inputProductName +
+                                  " was successfully added in store. Press enter to continue.");
             }
             else
             {
-                Console.WriteLine("Error: The product " + product.name + " wasn't added in store. Contact the administrator of the system. Press enter to continue. ");
-                Console.ReadLine();
+                Console.WriteLine(result + " Press enter to continue.");
             }
-
+            Console.ReadLine();
         }
-
         
     }
 }
