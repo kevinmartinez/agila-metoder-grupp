@@ -72,7 +72,7 @@ namespace BusinessSystem
         public Product GetProductByNumber(string number)
         {
             //--- Select products from store that corresponds to the given number (either zero or one product). ---
-            Product[] productGet = products.Where(item => item.number == number).ToArray();
+            Product[] productGet = products.Where(item => item.number.ToLower() == number.ToLower()).ToArray();
 
             if (productGet.Length > 0)
             {
@@ -90,7 +90,7 @@ namespace BusinessSystem
         public Product GetProductBylName(string name)
         {
             //--- Select products from store that corresponds to the given name (either zero or one product). ---
-            Product[] productGet = products.Where(item => item.name == name).ToArray();
+            Product[] productGet = products.Where(item => item.name.ToLower() == name.ToLower()).ToArray();
 
             if (productGet.Length > 0)
             {
