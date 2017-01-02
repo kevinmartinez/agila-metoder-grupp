@@ -102,7 +102,7 @@ namespace BusinessSystem
         private void SubMenu_7()
         {
             Console.Clear();
-            Console.WriteLine("Register new product");
+            Console.WriteLine("Register a new product");
             Console.Write("Enter product number: ");
             string inputProductNumber = Console.ReadLine();
             while (inputProductNumber == "")
