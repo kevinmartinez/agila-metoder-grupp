@@ -95,6 +95,7 @@ namespace BusinessSystem
                     break;
                 case 8:
                     //ropa på registrera ny kund
+                    SubMenu_8();
                     break;
             }
         }
@@ -137,6 +138,44 @@ namespace BusinessSystem
             {
                 Console.WriteLine(result + " Press enter to continue.");
             }
+            Console.ReadLine();
+        }
+
+        private void SubMenu_8()
+        {
+            Console.Clear();
+            Console.WriteLine("Register a new customer");
+            Console.Write("Enter customer name: ");
+            string inputCustomerName = Console.ReadLine();
+            while (inputCustomerName == "") {
+                Console.WriteLine("Customer name cannot be empty. Enter a valid customer name please: ");
+                inputCustomerName = Console.ReadLine();
+            }
+            Console.Write("Enter customer address: ");
+            string inputCustomerAddress = Console.ReadLine();
+            while (inputCustomerAddress == "") {
+                Console.WriteLine("Customer address cannot be empty. Enter a valid customer address please: ");
+                inputCustomerAddress = Console.ReadLine();
+            }
+            var result = Store.AddCustomer(inputCustomerName, inputCustomerAddress);
+            switch (result)
+            {
+                case "Customer already exists.":
+                    Console.WriteLine(result);
+                    break;
+                default:
+                    Console.WriteLine("The new customer " + inputCustomerName + " was successfully added. Customer number is: " + result);
+                    break;
+
+            }
+            //if (result == "Customer already exists.") {
+            //    Console.WriteLine(result + " Press enter to continue.");
+            //}
+            //else {
+            //    Console.WriteLine("The new customer " + inputCustomerName +
+            //                      " was successfully added. Customer number is: " + result + " Press enter to continue.");
+            //}
+            Console.WriteLine("Press enter to continue.");
             Console.ReadLine();
         }
         
