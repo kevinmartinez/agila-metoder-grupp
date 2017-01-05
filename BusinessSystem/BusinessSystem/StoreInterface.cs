@@ -9,7 +9,8 @@ namespace BusinessSystem
     //--- Class Store interface. Channel to Store class. ---
     public class StoreInterface
     {
-        public Store<Product> store = new Store<Product>();
+        Products<Product> store = new Products<Product>();
+        Customers<Customer> customers = new Customers<Customer>();
 
 
         //==============================================================================================
@@ -46,10 +47,31 @@ namespace BusinessSystem
 
             return errorMessage;
         }
+
+
+
+        //==============================================================================================
+        // Add customer.
+        // Input parameters are all string values from input source (console).
+        // Returns an empty string (no error message) if added ok. 
+        //==============================================================================================
+        public string AddCustomer(string name, string address)
+        {
+            string errorMessage = "";
+
+            //--- Make sure name and address not an empty string. ---
+            if ((name != null & name != "") & (address != null & address != ""))
+            {
+                Customer customer = new Customer(name, address);
+                if(!customers.AddCustomer(customer))
+                {
+                    errorMessage = "Customer already exists.";
+                }
+            }
+
+            return errorMessage;
+
+        }
+
     }
-
-
-
-
-
 }

@@ -35,9 +35,9 @@ namespace BusinessSystem
 
 
     //===========================================================================================
-    // Generic Store class.
+    // Generic Products class.
     //===========================================================================================
-    public class Store<T> : IEnumerable where T : Product
+    public class Products<T> : IEnumerable where T : Product
     {
         public List<T> products = new List<T>();
 
