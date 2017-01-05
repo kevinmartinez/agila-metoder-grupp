@@ -57,19 +57,27 @@ namespace BusinessSystem
         //==============================================================================================
         public string AddCustomer(string name, string address)
         {
-            string errorMessage = "";
+            string message = "";
 
             //--- Make sure name and address not an empty string. ---
             if ((name != null & name != "") & (address != null & address != ""))
             {
-                Customer customer = new Customer(name, address);
+                Customer customer = new Customer(0,name, address);
                 if(!customers.AddCustomer(customer))
                 {
-                    errorMessage = "Customer already exists.";
+                    message = "Customer already exists.";
+                }
+                else
+                {
+                    message = customer.number.ToString();
                 }
             }
+            else
+            {
+                message = "Name or Address must not be empty.";
+            }
 
-            return errorMessage;
+            return message;
 
         }
 

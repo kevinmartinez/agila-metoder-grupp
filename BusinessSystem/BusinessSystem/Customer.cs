@@ -19,8 +19,9 @@ namespace BusinessSystem
 
 
         //--- Constructor ---
-        public Customer(string name, string address)
+        public Customer(int number,string name, string address)
         {
+            _number = number;
             _name = name;
             _address = address;
         }
