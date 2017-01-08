@@ -5,21 +5,22 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using BusinessSystem;
+using System.IO;
 
 namespace BusinessSystem
 {
     class BusinessSystemUi
     {
-
-        //private Store<Product> Store = new Store<Product>();
+        
         private StoreInterface Store = new StoreInterface();
+        OrderStock<Order<OrderRow>> _orderStock = new OrderStock<Order<OrderRow>>();
 
         public void StartApplication()
         {
-            MainMenu();
+            DisplayMainMenu();
         }
 
-        private void MainMenu()
+        private void DisplayMainMenu()
         {
             int userInputInt = 0;
             do
@@ -42,13 +43,13 @@ namespace BusinessSystem
                 }
                 try {
                     int menuSelection = Convert.ToInt32(userInput);
-                    SubMenu(menuSelection);
+                    DisplaySubMenu(menuSelection);
                 }
                 catch (Exception exception) {
                     //TODO: logga exception
                 }
             } while (userInputInt <= 8 && userInputInt >= 1);
-            
+
 
         }
 
@@ -67,12 +68,13 @@ namespace BusinessSystem
             return menuMessage;
         }
 
-        private void SubMenu(int menuSelection)
+        private void DisplaySubMenu(int menuSelection)
         {
             switch (menuSelection)
             {
                 case 1:
                     //ropa på registrera ny order
+                    SubMenu_1();
                     break;
                 case 2:
                     //ropa på ta bort order
@@ -82,12 +84,14 @@ namespace BusinessSystem
                     break;
                 case 4:
                     //ropa på lista order per kund
+                    //SubMenu_4();
                     break;
                 case 5:
                     //ropa på lista produkter i lager
                     break;
                 case 6:
                     //ropa på byta pris på produkt
+                    SubMenu_6();
                     break;
                 case 7:
                     //ropa på registrera ny produkt
@@ -98,6 +102,22 @@ namespace BusinessSystem
                     SubMenu_8();
                     break;
             }
+        }
+
+        private void SubMenu_1()
+        {
+            _orderStock.AddOrderToOrderStock(Store);
+
+        }
+
+        private void SubMenu_4()
+        {
+            
+        }
+
+        private void SubMenu_6()
+        {
+            //Store.changepriceonproduct
         }
 
         private void SubMenu_7() {
@@ -127,7 +147,7 @@ namespace BusinessSystem
                 Console.WriteLine("Product quantity cannot be empty. Enter a valid product quantity please: ");
                 inputProductQuantity = Console.ReadLine();
             }
-
+            
             var result = Store.AddProduct(inputProductNumber, inputProductName, inputProductPrice, inputProductQuantity);
             if (result == "")
             {
@@ -168,13 +188,7 @@ namespace BusinessSystem
                     break;
 
             }
-            //if (result == "Customer already exists.") {
-            //    Console.WriteLine(result + " Press enter to continue.");
-            //}
-            //else {
-            //    Console.WriteLine("The new customer " + inputCustomerName +
-            //                      " was successfully added. Customer number is: " + result + " Press enter to continue.");
-            //}
+            
             Console.WriteLine("Press enter to continue.");
             Console.ReadLine();
         }
