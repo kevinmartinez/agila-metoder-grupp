@@ -46,8 +46,7 @@
     <Compile Include="BusinessSystemUi.cs" />
     <Compile Include="Customer.cs" />
     <Compile Include="Order.cs" />
-    <Compile Include="OrderRow.cs" />
-    <Compile Include="OrderStock.cs" />
+    <Compile Include="Order_Old.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Product.cs" />

@@ -12,108 +12,152 @@ using BusinessSystem;
 
 namespace BusinessSystem
 {
-    class Order<T> where T : OrderRow
+    public class OrderRow
     {
-        private List<OrderRow> _orderRowList = new List<OrderRow>();
-        private int row = 0;
-        public string CustomerName { get; set; }
-        public int OrderNumber { get; set; }
-       
-        public IEnumerator GetEnumerator() {
-            for (int i = 0; i < _orderRowList.Count; i++) {
+        private int _orderNumber;
+        private int _customerNumber;
+        private int _rowNumber;
+        private string _productNumber;
+        private string _productName;
+        private decimal _productPrice;
+        private int _quantity;
 
-                yield return _orderRowList[i];
-            }
-        }
+        public int orderNumber { get { return _orderNumber; } }
+        public int customerNumber { get { return _customerNumber; } }
+        public int rowNumber { get { return _rowNumber; } }
+        public string productNumber { get { return _productNumber; } }
+        public string productName { get { return _productName; } }
+        public decimal productPrice { get { return _productPrice; } }
+        public int quantity { get { return _quantity; } set { _quantity = value; } }
 
-        public Order(string customerName, int orderNumber) //Konstruktor
+
+        //--- Constructor ---
+        public OrderRow(int orderNumber, int customerNumber, int rowNumber, string productNumber, string productName, decimal productPrice, int quantity)
         {
-            this.CustomerName = customerName;
-            this.OrderNumber = orderNumber;
-            bool continueToAddRows = true;
-            do
+            _orderNumber = orderNumber;
+            _customerNumber = customerNumber;
+            _rowNumber = rowNumber;
+            _productNumber = productNumber;
+            _productName = productName;
+            _productPrice = productPrice;
+            _quantity = quantity;
+        }
+    }
+
+
+    //===========================================================================================
+    // Generic Orders class.
+    //===========================================================================================
+    class Orders<T> where T : OrderRow
+    {
+        public List<OrderRow> orderRows = new List<OrderRow>();
+
+
+        //--- Enumerator. ---
+        public IEnumerator GetEnumerator()
+        {
+            for (int i = 0; i < orderRows.Count; i++)
             {
-                AskForInputAndAddRowToOrder();
-                continueToAddRows = CheckIfUserWillContinueToAddRows();
-            } while (continueToAddRows);
+
+                yield return orderRows[i];
+            }
         }
 
-        public void AskForInputAndAddRowToOrder()
-        {
-            Console.WriteLine("Select a product to add to order: ");
-            string inputProduct = Console.ReadLine();
-            while (inputProduct == "") {
-                Console.WriteLine("Product cannot be empty. Enter a valid product please: ");
-                inputProduct = Console.ReadLine();
-            }
-            //TODO: check if product exists in store, if not continue asking for a valid product
-            int numberOfItems = GetANumberFromUser();
-            while (numberOfItems == 0) {
-                numberOfItems = GetANumberFromUser();
-            }
-            OrderRow orderRow = new OrderRow(row, inputProduct, numberOfItems);
-            _orderRowList.Add(orderRow);
-            row++;
-            Console.WriteLine("The product was successfully added to the order. ");
-        }
-        
-        private int GetANumberFromUser()
-        {
-            Console.WriteLine("How many items of this product do you want to buy? ");
-            string inputNumber = Console.ReadLine();
-            while (inputNumber == "" || inputNumber == "0") {
-                Console.WriteLine("The number of products cannot be empty or zero. Enter a number please: ");
-                inputNumber = Console.ReadLine();
-            }
-            int numberOfItems = 0;
-            try {
-                numberOfItems = Convert.ToInt32(inputNumber);
-            }
-            catch (Exception exception) {
 
-                Console.WriteLine("You must enter a number. Try again please.");
-            }
-            return numberOfItems;
-        }
-
-        private bool CheckIfUserWillContinueToAddRows()
+        //==================================================================================================================
+        // Get highest used Ordernumber.
+        //==================================================================================================================
+        private int GetHighestOrderNumber()
         {
-            Console.WriteLine("Do you want to continue adding rows in this order? (Y/N)");
-            string answer = Console.ReadLine();
-            while (answer == "")
+            //--- Get the highest order number and return. Return 0 if first. ---
+            if (orderRows.Count > 0)
             {
-                Console.WriteLine("You must answer Y or N if you want to continue adding rows or not please.");
-                answer = Console.ReadLine();
-            }
-
-            if (answer.ToLower() == "y")
-            {
-                return true;
+                return orderRows.Max(item => item.orderNumber);
             }
             else
             {
-                return false;
+                return 0;
             }
-            
         }
 
-        public void PrintAllRowsInOrderToConsole()
+
+        //==================================================================================================================
+        // Get highest used Rownumber in the specified order.
+        //==================================================================================================================
+        private int GetHighestRowNumber(int orderNumber)
         {
-            foreach (var v in _orderRowList) {
-                Console.WriteLine("Row: " + v.row + " Product: " + v.ProductName + " Amount: " + v.NumberOfItems);
-            }
+            //--- Get the highest rownumber for specified order and return. ---
+            return orderRows.Where(item => item.orderNumber == orderNumber).Max(item => item.rowNumber);
         }
 
-        //public void PrintAllRowsInOrderToFile(string customerName, StreamWriter file)
-        //{
-            
-        //    //lista alla order för en viss kund... 
-        //    //Console.WriteLine("List orders for :" + customerName);
-        //    foreach (var v in _orderRowList)
-        //    {
-        //        //Console.WriteLine("Row: " + v.row + " Product: " + v.ProductName + " Amount: " + v.NumberOfItems);
-        //        file.WriteLine(v.row + ";" + v.ProductName + ";" + v.NumberOfItems);
-        //    }
-        //}
+
+        //==================================================================================================================
+        // Get Customernumber from the specified ordernumber.
+        //==================================================================================================================
+        private int GetCustomerNumberByOrderNumber(int orderNumber)
+        {
+            //--- Get the highest rownumber for specified order and return. ---
+            List<OrderRow> orderRow = orderRows.Where(item => item.orderNumber == orderNumber && item.rowNumber == 0).ToList();
+
+            if (orderRow.Count > 0)
+            {
+                return orderRow[0].customerNumber;
+            }
+            else
+            {
+                return 0;
+            }
+
+        }
+
+
+        //====================================================================================================================================
+        // Insert Orderrow.
+        //====================================================================================================================================
+        public void InsertOrderRow(int orderNumber, int customerNumber, int rowNumber, string productNumber, string productName
+                                , decimal productPrice, int quantity)
+        {
+            OrderRow orderRow = new OrderRow(orderNumber, customerNumber, rowNumber, productNumber, productName, productPrice, quantity);
+            orderRows.Add(orderRow);
+        }
+
+
+        //==================================================================================================================
+        // Add Order.
+        // Order is an orderrow with rownumber equal to 0. Rows from 1 and upwards contains the products in the order.
+        // Ordernumber is returned.
+        //==================================================================================================================
+        public int AddOrder(int customerNumber)
+        {
+            //--- Get next order number. ---
+            int orderNumber = GetHighestOrderNumber() + 1;
+
+            //--- Add orderrow to orderlist. ---
+            InsertOrderRow(orderNumber, customerNumber, 0, "", "", 0, 0);
+
+            return orderNumber;
+        }
+
+
+        //==================================================================================================================
+        // Add Orderrow.
+        //==================================================================================================================
+        public int AddOrderRow(int orderNumber, string productNumber, string productName, decimal productPrice, int quantity)
+        {
+            //--- Get customer number for the current order. ---
+            int customerNumber = GetCustomerNumberByOrderNumber(orderNumber);
+
+            //--- Get next rownumber for the current order. ---
+            int rowNumber = GetHighestRowNumber(orderNumber) + 1;
+
+            //--- Add orderrow to orderlist. ---
+            InsertOrderRow(orderNumber, customerNumber, rowNumber, productNumber, productName, productPrice, quantity);
+
+            return rowNumber;
+
+        }
+
     }
+
+
 }

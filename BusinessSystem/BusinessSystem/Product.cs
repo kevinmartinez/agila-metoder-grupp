@@ -15,22 +15,23 @@ namespace BusinessSystem
     {
         private string _number;
         private string _name;
-        private double _price;
+        private decimal _price;
         private int _quantity;
 
         public string number { get { return _number; } }
         public string name { get { return _name; } }
-        public double price { get { return _price; } }
-        public int quantity { get { return _quantity; } }
+        public decimal price { get { return _price; } set { _price = value; } }
+        public int quantity { get { return _quantity; } set { _quantity = value; } }
 
         //--- Constructor ---
-        public Product(string number, string name, double price, int quantity)
+        public Product(string number, string name, decimal price, int quantity)
         {
             _number = number;
             _name = name;
             _price = price;
             _quantity = quantity;
         }
+
     }
 
 
@@ -39,7 +40,7 @@ namespace BusinessSystem
     //===========================================================================================
     public class Products<T> : IEnumerable where T : Product
     {
-        public List<T> products = new List<T>();
+        public List<Product> products = new List<Product>();
 
 
         //--- Enumerator. ---
@@ -52,23 +53,9 @@ namespace BusinessSystem
         }
 
 
-        //--- Add product. ---
-        public bool AddProduct(T product)
-        {
-            //--- Make sure the artikel not already in the Store. ---
-            if (GetProductByNumber(product.number) == null & GetProductBylName(product.name) == null)
-            {
-                products.Add(product);
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-
-        //--- Get product by number. ---
+        //===========================================================================================
+        // Get product by number.
+        //===========================================================================================
         public Product GetProductByNumber(string number)
         {
             //--- Select products from store that corresponds to the given number (either zero or one product). ---
@@ -86,8 +73,10 @@ namespace BusinessSystem
         }
 
 
-        //--- Get product by name. ---
-        public Product GetProductBylName(string name)
+        //===========================================================================================
+        // Get product by name.
+        //===========================================================================================
+        public Product GetProductByName(string name)
         {
             //--- Select products from store that corresponds to the given name (either zero or one product). ---
             Product[] productGet = products.Where(item => item.name.ToLower() == name.ToLower()).ToArray();
@@ -100,8 +89,69 @@ namespace BusinessSystem
             {
                 return null;
             }
+
+        }
+
+
+        //===========================================================================================
+        // Add product.
+        //===========================================================================================
+        public bool AddProduct(string productNumber, string productName, decimal price, int quantity)
+        {
+            //--- Make sure the artikel not already in the Store. ---
+            if (GetProductByNumber(productNumber) == null & GetProductByName(productName) == null)
+            {
+                Product product = new Product(productNumber, productName, price, quantity);
+                products.Add(product);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+
+        //===========================================================================================
+        // Change product price.
+        //===========================================================================================
+        public bool ChangeProductPrice(string productNumber, decimal productPrice)
+        {
+            //--- Get product. Change price if exists. ---
+            Product product = GetProductByNumber(productNumber);
+
+            if(product!=null)
+            {
+                product.price = productPrice;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
+
+
+        //===========================================================================================
+        // Change product quantity.
+        //===========================================================================================
+        public bool ChangeProductQuantity(string productNumber, int productQuantity)
+        {
+            //--- Get product. Change price if exists. ---
+            Product product = GetProductByNumber(productNumber);
+
+            if (product != null)
+            {
+                product.quantity = productQuantity;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
         }
 
     }
-
 }

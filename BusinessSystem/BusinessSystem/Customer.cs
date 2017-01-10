@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BusinessSystem
 {
-    class Customer
+    public class Customer
     {
         private int _number;
         private string _name;
@@ -19,7 +19,7 @@ namespace BusinessSystem
 
 
         //--- Constructor ---
-        public Customer(int number,string name, string address)
+        public Customer(int number, string name, string address)
         {
             _number = number;
             _name = name;
@@ -33,7 +33,7 @@ namespace BusinessSystem
     //===========================================================================================
     class Customers<T> : IEnumerable where T : Customer
     {
-        public List<T> customers = new List<T>();
+        public List<Customer> customers = new List<Customer>();
 
 
         //--- Enumerator. ---
@@ -46,28 +46,13 @@ namespace BusinessSystem
         }
 
 
-        //--- Add customer. ---
-        public bool AddCustomer(T customer)
-        {
-            //--- Make sure the customer not already in the customerlist. ---
-            if (GetCustomerByName(customer.name) == null & GetCustomerByAddress(customer.address) == null)
-            {
-                //- Get the highest customer number -
-                customer.number = GetCustomerHighestNumber() + 1;
-                customers.Add(customer);
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
 
-
-        //--- Get customer by number. ---
+        //===========================================================================================
+        // Get highest used customernumber.
+        //===========================================================================================
         private int GetCustomerHighestNumber()
         {
-            //--- Get the highest customer number and return. ---
+            //--- Get the highest customer number and return. Return 0 if first. ---
             if (customers.Count > 0)
             {
                 return customers.Max(item => item.number);
@@ -79,37 +64,77 @@ namespace BusinessSystem
         }
 
 
-        //--- Get customer by name. ---
-        public Customer GetCustomerByName(string name)
+        //====================================================================================================================================
+        // Insert Customer
+        //====================================================================================================================================
+        public void InsertCustomer(int customerNumber, string name, string address)
         {
-            //--- Select products from store that corresponds to the given name (either zero or one product). ---
-            Customer[] customerGet = customers.Where(item => item.name.ToLower() == name.ToLower()).ToArray();
+            Customer customerNew = new Customer(customerNumber, name,address);
+            customers.Add(customerNew);
+        }
 
-            if (customerGet.Length > 0)
-            {
-                return customerGet[0];
+
+        //===========================================================================================
+        // Add customer
+        //===========================================================================================
+        public int AddCustomer(string name, string address)
+        {
+            //--- Make sure the customer not already in the customerlist. ---
+                if (GetCustomerByNameAddress(name, address).Length==0)
+                {
+                    //--- Get the highest customer number and set to new customer object. ---
+                    int customerNumber = GetCustomerHighestNumber() + 1;
+
+                //--- Add customer. ---
+                InsertCustomer(customerNumber, name, address);
+                return customerNumber;
             }
             else
             {
-                return null;
+                return 0;
             }
         }
 
 
-        //--- Get customer by address. ---
-        public Customer GetCustomerByAddress(string address)
+       //===========================================================================================
+        // Get customer by number.
+        //===========================================================================================
+        public Customer[] GetCustomerByNumber(int number)
         {
-            //--- Select products from store that corresponds to the given name (either zero or one product). ---
-            Customer[] customerGet = customers.Where(item => item.address.ToLower() == address.ToLower()).ToArray();
+            //--- Select customer from customers list that corresponds to the given number. ---
+            return customers.Where(item => item.number == number).ToArray();
+        }
 
-            if (customerGet.Length > 0)
-            {
-                return customerGet[0];
-            }
-            else
-            {
-                return null;
-            }
+
+        //===========================================================================================
+        // Get customer by Name.
+        //===========================================================================================
+        public Customer[] GetCustomerByName(string name)
+        {
+            //--- Select customer from customers list that corresponds to the given name. ---
+            return customers.Where(item => item.name.ToLower() == name.ToLower()).ToArray();
+        }
+
+
+        //===========================================================================================
+        // Get customer by Address.
+        //===========================================================================================
+        public Customer[] GetCustomerByAddress(string address)
+        {
+            //--- Select customer from customers list that corresponds to the given address. ---
+            return customers.Where(item => item.address.ToLower() == address.ToLower()).ToArray();
+
+        }
+
+
+        //===========================================================================================
+        // Get customer by Name and Address.
+        //===========================================================================================
+        public Customer[] GetCustomerByNameAddress(string name,string address)
+        {
+            //--- Select customer from customers list that corresponds to the given address. ---
+            return customers.Where(item => item.name.ToLower() == name.ToLower() && item.address.ToLower() == address.ToLower() ).ToArray();
+
         }
 
     }

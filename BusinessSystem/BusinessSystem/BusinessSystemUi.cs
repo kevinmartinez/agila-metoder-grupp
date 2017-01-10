@@ -13,7 +13,7 @@ namespace BusinessSystem
     {
         
         private StoreInterface Store = new StoreInterface();
-        OrderStock<Order<OrderRow>> _orderStock = new OrderStock<Order<OrderRow>>();
+        //OrderStock<Orders<OrderRow>> _orderStock = new OrderStock<Orders<OrderRow>>();
 
         public void StartApplication()
         {
@@ -106,7 +106,7 @@ namespace BusinessSystem
 
         private void SubMenu_1()
         {
-            _orderStock.AddOrderToOrderStock(Store);
+            //_orderStock.AddOrderToOrderStock(Store);
 
         }
 
