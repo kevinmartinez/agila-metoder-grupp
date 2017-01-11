@@ -30,6 +30,7 @@ namespace BusinessSystem
 
             BusinessSystemUi ui = new BusinessSystemUi();
             ui.StartApplication();
+            ui.EndApplication();
         }
     }
 
