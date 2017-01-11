@@ -10,7 +10,7 @@ namespace BusinessSystem
     {
         static void Main(string[] args)
         {
-            StoreInterface stIF = new StoreInterface();
+            //StoreInterface stIF = new StoreInterface();
             /*            stIF.AddProduct("a", "b", "1,50", "10");
                         stIF.AddProduct("2", "xxx", "100", "20");
                         stIF.AddProduct("123-45", "skorpan", "5000", "1");
@@ -26,7 +26,6 @@ namespace BusinessSystem
             message = stIF.ModifyProductQuantity("232", "36");
             stIF.SaveAllToFile();
             */
-
 
             BusinessSystemUi ui = new BusinessSystemUi();
             ui.StartApplication();
