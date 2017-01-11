@@ -20,6 +20,11 @@ namespace BusinessSystem
             DisplayMainMenu();
         }
 
+        public void EndApplication()
+        {
+            Store.SaveAllToFile();
+        }
+
         private void DisplayMainMenu()
         {
             int userInputInt = 0;
@@ -60,7 +65,7 @@ namespace BusinessSystem
                                   + "\n2. To remove an order."
                                   + "\n3. To update an order"
                                   + "\n4. To list all orders by customer name."
-                                  + "\n5. To list all products in store."
+                                  + "\n5. To change the number of products in store."
                                   + "\n6. To change the price of a product."
                                   + "\n7. To register a new product."
                                   + "\n8. To register a new customer"
@@ -78,16 +83,19 @@ namespace BusinessSystem
                     break;
                 case 2:
                     //ropa på ta bort order
+                    //SubMenu_2();
                     break;
                 case 3:
                     //ropa på uppdatera order
+                    //SubMenu_3();
                     break;
                 case 4:
                     //ropa på lista order per kund
                     //SubMenu_4();
                     break;
                 case 5:
-                    //ropa på lista produkter i lager
+                    //ropa på ändra antalet produkter i lager
+                    SubMenu_5();
                     break;
                 case 6:
                     //ropa på byta pris på produkt
@@ -106,8 +114,86 @@ namespace BusinessSystem
 
         private void SubMenu_1()
         {
-            //_orderStock.AddOrderToOrderStock(Store);
+            Console.Clear();
+            Console.WriteLine("Enter customer number: "); 
+            string input = Console.ReadLine();
+            while (input == "") {
+                Console.WriteLine("Customer number cannot be empty. You must enter a valid customer number please: ");
+                input = Console.ReadLine();
+            }
+            string result = Store.AddOrder(input);
 
+            switch (result)
+            {
+                case "Error":
+                    Console.WriteLine("An error occurred, please try again. ");
+                    break;
+                case "Customer number does not exist!":
+                    Console.WriteLine(result);
+                    break;
+                default:
+                    //continue to add rows in order:
+                    string message = "";
+                    bool continueToAddRows = true;
+                    do {
+                        //AskForInputAndAddRowToOrder();
+                        
+                        Console.WriteLine("Enter product number: ");
+                        string inputProductNumber = Console.ReadLine();
+                        while (inputProductNumber == "") {
+                            Console.WriteLine("Product number cannot be empty. You must enter a valid product number please: ");
+                            inputProductNumber = Console.ReadLine();
+                        }
+                        Console.WriteLine("Enter the number of products: ");
+                        string inputProductQuantity = Console.ReadLine();
+                        while (inputProductQuantity == "") {
+                            Console.WriteLine("You must enter how many products you want to buy. Enter a number please: ");
+                            inputProductQuantity = Console.ReadLine();
+                        }
+                        string rowResult = Store.AddOrderRow(result, inputProductNumber, inputProductQuantity, out message);
+                        if (message != "") {
+                            Console.WriteLine(message);
+                            
+                        }
+                        if (rowResult != "0") {
+                            Console.WriteLine("The row " + rowResult + " was added to the order.");
+                        }
+
+                      continueToAddRows = CheckIfUserWillContinueToAddRows();
+                        Console.Clear();
+                    } while (continueToAddRows);
+
+                    break;
+
+            }     
+                
+        }
+
+        private bool CheckIfUserWillContinueToAddRows() {
+            Console.WriteLine("Do you want to continue adding rows in this order? (Y/N)");
+            string answer = Console.ReadLine();
+            while (answer == "") {
+                Console.WriteLine("You must answer Y or N if you want to continue adding rows or not please.");
+                answer = Console.ReadLine();
+            }
+
+            if (answer.ToLower() == "y") {
+                return true;
+            }
+            else {
+                return false;
+            }
+
+        }
+
+        private void SubMenu_2()
+        {
+            //remove an order
+        }
+
+        private void SubMenu_3()
+        {
+            //update an order
         }
 
         private void SubMenu_4()
@@ -115,9 +201,60 @@ namespace BusinessSystem
             
         }
 
+        private void SubMenu_5()
+        {
+            Console.Clear();
+            Console.WriteLine("Change the number of products in store: ");
+            Console.Write("Enter product number: ");
+            string inputProductNumber = Console.ReadLine();
+            while (inputProductNumber == "") {
+                Console.WriteLine("Product number cannot be empty. Enter a valid product number please: ");
+                inputProductNumber = Console.ReadLine();
+            }
+            Console.Write("Enter the new amount for this product: ");
+            string inputProductQuantity = Console.ReadLine();
+            while (inputProductQuantity == "") {
+                Console.WriteLine("The number of products cannot be empty. Enter zero or a positive number please: ");
+                inputProductQuantity = Console.ReadLine();
+            }
+            string result = Store.ModifyProductQuantity(inputProductNumber, inputProductQuantity);
+            if (result != "") {
+                Console.WriteLine(result);
+                Console.ReadLine();
+            }
+            else {
+                Console.WriteLine("The product's amount is now changed. Press enter to continue.");
+                Console.ReadLine();
+            }
+        }
+
         private void SubMenu_6()
         {
-            //Store.changepriceonproduct
+            Console.Clear();
+            Console.WriteLine("Change the price on a product");
+            Console.Write("Enter product number: ");
+            string inputProductNumber = Console.ReadLine();
+            while (inputProductNumber == "") {
+                Console.WriteLine("Product number cannot be empty. Enter a valid product number please: ");
+                inputProductNumber = Console.ReadLine();
+            }
+            Console.Write("Enter the new price on the product: ");
+            string inputProductPrice = Console.ReadLine();
+            while (inputProductPrice == "") {
+                Console.WriteLine("Product price cannot be empty. Enter a valid product price please: ");
+                inputProductPrice = Console.ReadLine();
+            }
+            string result = Store.ModifyProductPrice(inputProductNumber, inputProductPrice);
+            if (result != "")
+            {
+                Console.WriteLine(result);
+                Console.ReadLine();
+            }
+            else
+            {
+                Console.WriteLine("The product price is now changed. Press enter to continue.");
+                Console.ReadLine();
+            }
         }
 
         private void SubMenu_7() {

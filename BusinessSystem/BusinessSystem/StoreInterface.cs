@@ -47,12 +47,12 @@ namespace BusinessSystem
         public string AddProduct(string number, string name, string price, string quantity)
         {
             string errorMessage = "";
-            decimal priceD;    //- Price as double
-            int quantityInt;    //- Quantity as integer
+            decimal priceD; //- Price as double
+            int quantityInt; //- Quantity as integer
 
             //--- Make sure number and name not an empty string, price is double, quantity is integer. ---
             bool formatOk = ((number != null & number != "") & (name != null & name != "")
-                & decimal.TryParse(price, out priceD) & int.TryParse(quantity, out quantityInt));
+                             & decimal.TryParse(price, out priceD) & int.TryParse(quantity, out quantityInt));
 
             if (formatOk)
             {
@@ -67,7 +67,8 @@ namespace BusinessSystem
             }
             else
             {
-                errorMessage = "Illegal format. Number, name must not be empty, price needs to be a number (i.e. 12,50), quantity an integer number.";
+                errorMessage =
+                    "Illegal format. Number, name must not be empty, price needs to be a number (i.e. 12,50), quantity an integer number.";
             }
 
             return errorMessage;
@@ -84,7 +85,7 @@ namespace BusinessSystem
 
             if (!products.ChangeProductPrice(productNumber, decimal.Parse(priceNew)))
             {
-                message = "Product '" + productNumber + "' does not exists !";
+                message = "Product '" + productNumber + "' does not exist!";
             }
 
             return message;
@@ -102,7 +103,7 @@ namespace BusinessSystem
 
             if (!products.ChangeProductQuantity(productNumber, int.Parse(quantityNew)))
             {
-                message = "Product '" + productNumber + "' does not exists !";
+                message = "Product '" + productNumber + "' does not exist!";
             }
 
             return message;
@@ -189,14 +190,22 @@ namespace BusinessSystem
         public string AddOrder(string customerNumber)
         {
             //--- Check that customer exists before adding order. ---
-            if (customers.GetCustomerByNumber(int.Parse(customerNumber)).Length > 0)
+            try
             {
-                return orders.AddOrder(int.Parse(customerNumber)).ToString();
+                if (customers.GetCustomerByNumber(int.Parse(customerNumber)).Length > 0) {
+                    return orders.AddOrder(int.Parse(customerNumber)).ToString();
+                }
+                else {
+                    //return "Customer number '" + customerNumber + "' does not exist!";
+                    return "Customer number does not exist!";
+                }
             }
-            else
+            catch (Exception exception)
             {
-                return "Customer number '" + customerNumber + "' does not exists !";
+                return "Error";
+
             }
+           
         }
 
 
@@ -224,7 +233,7 @@ namespace BusinessSystem
 
             else
             {
-                message = "Product '" + productNumber + "' does not exists !";
+                message = "Product '" + productNumber + "' does not exist!";
                 return "0";
             }
 
