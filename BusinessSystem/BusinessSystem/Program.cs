@@ -10,7 +10,7 @@ namespace BusinessSystem
     {
         static void Main(string[] args)
         {
-            //StoreInterface stIF = new StoreInterface();
+            StoreInterface stIF = new StoreInterface();
             /*            stIF.AddProduct("a", "b", "1,50", "10");
                         stIF.AddProduct("2", "xxx", "100", "20");
                         stIF.AddProduct("123-45", "skorpan", "5000", "1");
@@ -25,6 +25,16 @@ namespace BusinessSystem
             string message=stIF.ModifyProductPrice("232", "1,65");
             message = stIF.ModifyProductQuantity("232", "36");
             stIF.SaveAllToFile();
+            */
+
+            /*            string customernumber = "", errormessage = "", ordernumber = "";
+                        do
+                        {
+                            Console.Write("Kundnr:");
+                            customernumber = Console.ReadLine();
+                            ordernumber = stIF.AddOrderHeader(customernumber, out errormessage);
+                            if (errormessage!="") Console.WriteLine("  " + errormessage);
+                        } while (customernumber != "" && ordernumber == "0");
             */
 
             BusinessSystemUi ui = new BusinessSystemUi();

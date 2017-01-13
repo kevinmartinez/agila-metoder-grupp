@@ -121,7 +121,8 @@ namespace BusinessSystem
                 Console.WriteLine("Customer number cannot be empty. You must enter a valid customer number please: ");
                 input = Console.ReadLine();
             }
-            string result = Store.AddOrder(input);
+            //string result = Store.AddOrderHeader(input);
+            string result = "";
 
             switch (result)
             {

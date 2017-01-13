@@ -10,49 +10,22 @@ using System.Text;
 using System.Threading.Tasks;
 using BusinessSystem;
 
+/*
 namespace BusinessSystem
 {
-    //--- Base Class Order ---
-    public class Order
+    public class OrderRow
     {
         private int _orderNumber;
-
-        public int orderNumber { get { return _orderNumber; } }
-
-        public Order(int orderNumber)
-        {
-            _orderNumber = orderNumber;
-        }
-    }
-
-    //--- Class Orderheader, Customer added ---
-    public class OrderHeader : Order
-    {
         private int _customerNumber;
-        private string _customerName;
-
-        public int customerNumber { get { return _customerNumber; } }
-        public string customerame { get { return _customerName; } }
-
-        public OrderHeader(int orderNumber, int customerNumber, string customerName) : base(orderNumber)
-        {
-            _customerNumber = customerNumber;
-            _customerName = customerName;
-        }
-
-    }
-
-
-    //--- Class Orderrow, Product added ---
-    public class OrderRow : Order
-    {
         private int _rowNumber;
         private string _productNumber;
         private string _productName;
         private decimal _productPrice;
         private int _quantity;
 
-        public int rowNumber { get { return _rowNumber; } set { _rowNumber = value; } }
+        public int orderNumber { get { return _orderNumber; } }
+        public int customerNumber { get { return _customerNumber; } }
+        public int rowNumber { get { return _rowNumber; } }
         public string productNumber { get { return _productNumber; } }
         public string productName { get { return _productName; } }
         public decimal productPrice { get { return _productPrice; } }
@@ -60,8 +33,10 @@ namespace BusinessSystem
 
 
         //--- Constructor ---
-        public OrderRow(int orderNumber, int rowNumber, string productNumber, string productName, decimal productPrice, int quantity) : base(orderNumber)
+        public OrderRow(int orderNumber, int customerNumber, int rowNumber, string productNumber, string productName, decimal productPrice, int quantity)
         {
+            _orderNumber = orderNumber;
+            _customerNumber = customerNumber;
             _rowNumber = rowNumber;
             _productNumber = productNumber;
             _productName = productName;
@@ -74,18 +49,18 @@ namespace BusinessSystem
     //===========================================================================================
     // Generic Orders class.
     //===========================================================================================
-    class Orders<T> : IEnumerable where T : Order
+    class OrderObj<T> where T : OrderRow
     {
-        public List<T> orders = new List<T>();
+        public List<OrderRow> orderRows = new List<OrderRow>();
 
 
         //--- Enumerator. ---
         public IEnumerator GetEnumerator()
         {
-            for (int i = 0; i < orders.Count; i++)
+            for (int i = 0; i < orderRows.Count; i++)
             {
 
-                yield return orders[i];
+                yield return orderRows[i];
             }
         }
 
@@ -93,12 +68,12 @@ namespace BusinessSystem
         //==================================================================================================================
         // Get highest used Ordernumber.
         //==================================================================================================================
-        public int GetHighestOrderNumber()
+        private int GetHighestOrderNumber()
         {
             //--- Get the highest order number and return. Return 0 if first. ---
-            if (orders.Count > 0)
+            if (orderRows.Count > 0)
             {
-                return orders.Max(item => item.orderNumber);
+                return orderRows.Max(item => item.orderNumber);
             }
             else
             {
@@ -112,8 +87,8 @@ namespace BusinessSystem
         //==================================================================================================================
         private int GetHighestRowNumber(int orderNumber)
         {
-            //--- Get the highest rownumber for specified order. ---
-            return orders.OfType<OrderRow>().Where(item => item.orderNumber == orderNumber).Max(item => item.rowNumber);
+            //--- Get the highest rownumber for specified order and return. ---
+            return orderRows.Where(item => item.orderNumber == orderNumber).Max(item => item.rowNumber);
         }
 
 
@@ -122,19 +97,29 @@ namespace BusinessSystem
         //==================================================================================================================
         private int GetCustomerNumberByOrderNumber(int orderNumber)
         {
-            //--- Get the highest rownumber for specified order. ---
-            return orders.OfType<OrderHeader>().Where(item => item.orderNumber == orderNumber).ToArray()[0].customerNumber;
+            //--- Get the highest rownumber for specified order and return. ---
+            List<OrderRow> orderRow = orderRows.Where(item => item.orderNumber == orderNumber && item.rowNumber == 0).ToList();
+
+            if (orderRow.Count > 0)
+            {
+                return orderRow[0].customerNumber;
+            }
+            else
+            {
+                return 0;
+            }
+
         }
 
 
         //====================================================================================================================================
-        // Insert Order.
+        // Insert Orderrow.
         //====================================================================================================================================
-        //public void InsertOrderHeader(int orderNumber, int customerNumber, string customerName)
-        public void InsertOrderHeader(T orderHeader)
+        public void InsertOrderRow(int orderNumber, int customerNumber, int rowNumber, string productNumber, string productName
+                                , decimal productPrice, int quantity)
         {
-            //OrderHeader orderHeader = new OrderHeader(orderNumber, customerNumber, customerName);
-            this.orders.Add(orderHeader);
+            OrderRow orderRow = new OrderRow(orderNumber, customerNumber, rowNumber, productNumber, productName, productPrice, quantity);
+            orderRows.Add(orderRow);
         }
 
 
@@ -143,39 +128,38 @@ namespace BusinessSystem
         // Order is an orderrow with rownumber equal to 0. Rows from 1 and upwards contains the products in the order.
         // Ordernumber is returned.
         //==================================================================================================================
-        /*        public int AddOrderHeader(T orderHeader)
-                { 
-                    //--- Get next order number. ---
-                    int orderNumber = GetHighestOrderNumber() + 1;
+        public int AddOrder(int customerNumber)
+        {
+            //--- Get next order number. ---
+            int orderNumber = GetHighestOrderNumber() + 1;
 
-                    //--- Add orderheader to orderlist. ---
-                    //InsertOrderHeader(orderNumber, customerNumber, customerName);
-                    //T orderHeader = new OrderHeader(orderNumber, customerNumber, customerName);
+            //--- Add orderrow to orderlist. ---
+            InsertOrderRow(orderNumber, customerNumber, 0, "", "", 0, 0);
+
+            return orderNumber;
+        }
 
 
-                    return orderNumber;
-                }
-
-        */
         //==================================================================================================================
         // Add Orderrow.
         //==================================================================================================================
-        /*        public int AddOrderRow(int orderNumber, string productNumber, string productName, decimal productPrice, int quantity)
-                {
-                    //--- Get customer number for the current order. ---
-                    int customerNumber = GetCustomerNumberByOrderNumber(orderNumber);
+        public int AddOrderRow(int orderNumber, string productNumber, string productName, decimal productPrice, int quantity)
+        {
+            //--- Get customer number for the current order. ---
+            int customerNumber = GetCustomerNumberByOrderNumber(orderNumber);
 
-                    //--- Get next rownumber for the current order. ---
-                    int rowNumber = GetHighestRowNumber(orderNumber) + 1;
+            //--- Get next rownumber for the current order. ---
+            int rowNumber = GetHighestRowNumber(orderNumber) + 1;
 
-                    //--- Add orderrow to orderlist. ---
-                    InsertOrderRow(orderNumber, customerNumber, rowNumber, productNumber, productName, productPrice, quantity);
+            //--- Add orderrow to orderlist. ---
+            InsertOrderRow(orderNumber, customerNumber, rowNumber, productNumber, productName, productPrice, quantity);
 
-                    return rowNumber;
+            return rowNumber;
 
-                }
-        */
+        }
+
     }
 
 
 }
+*/

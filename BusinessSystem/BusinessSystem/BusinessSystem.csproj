@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="BusinessSystemUi.cs" />
     <Compile Include="Customer.cs" />
+    <Compile Include="Order - Copy.cs" />
     <Compile Include="Order.cs" />
     <Compile Include="Order_Old.cs" />
     <Compile Include="Program.cs" />
