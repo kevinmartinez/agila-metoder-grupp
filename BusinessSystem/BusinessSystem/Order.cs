@@ -17,7 +17,9 @@ namespace BusinessSystem
     {
         private int _orderNumber;
 
-        public int orderNumber { get { return _orderNumber; } }
+        public int orderNumber { get { return _orderNumber; } set { _orderNumber = value; } }
+
+        public Order() { }
 
         public Order(int orderNumber)
         {
@@ -25,25 +27,25 @@ namespace BusinessSystem
         }
     }
 
-    //--- Class Orderheader, Customer added ---
+    //--- Class Orderheader, Customer ---
     public class OrderHeader : Order
     {
         private int _customerNumber;
-        private string _customerName;
 
-        public int customerNumber { get { return _customerNumber; } }
-        public string customerame { get { return _customerName; } }
+        public int customerNumber { get { return _customerNumber; } set { _customerNumber = value; } }
 
-        public OrderHeader(int orderNumber, int customerNumber, string customerName) : base(orderNumber)
+        //--- Constructors ---
+        public OrderHeader() { }
+
+        public OrderHeader(int orderNumber, int customerNumber) : base(orderNumber)
         {
             _customerNumber = customerNumber;
-            _customerName = customerName;
         }
 
     }
 
 
-    //--- Class Orderrow, Product added ---
+    //--- Class Orderrow, Product ---
     public class OrderRow : Order
     {
         private int _rowNumber;
@@ -53,13 +55,15 @@ namespace BusinessSystem
         private int _quantity;
 
         public int rowNumber { get { return _rowNumber; } set { _rowNumber = value; } }
-        public string productNumber { get { return _productNumber; } }
-        public string productName { get { return _productName; } }
-        public decimal productPrice { get { return _productPrice; } }
+        public string productNumber { get { return _productNumber; } set { _productNumber = value; } }
+        public string productName { get { return _productName; } set { _productName = value; } }
+        public decimal productPrice { get { return _productPrice; } set { _productPrice = value; } }
         public int quantity { get { return _quantity; } set { _quantity = value; } }
 
 
-        //--- Constructor ---
+        //--- Constructors ---
+        public OrderRow() { }
+
         public OrderRow(int orderNumber, int rowNumber, string productNumber, string productName, decimal productPrice, int quantity) : base(orderNumber)
         {
             _rowNumber = rowNumber;
@@ -110,7 +114,7 @@ namespace BusinessSystem
         //==================================================================================================================
         // Get highest used Rownumber in the specified order.
         //==================================================================================================================
-        private int GetHighestRowNumber(int orderNumber)
+        public int GetHighestRowNumberByOrderNumber(int orderNumber)
         {
             //--- Get the highest rownumber for specified order. ---
             return orders.OfType<OrderRow>().Where(item => item.orderNumber == orderNumber).Max(item => item.rowNumber);
@@ -120,62 +124,98 @@ namespace BusinessSystem
         //==================================================================================================================
         // Get Customernumber from the specified ordernumber.
         //==================================================================================================================
-        private int GetCustomerNumberByOrderNumber(int orderNumber)
+        public int GetCustomerNumberByOrderNumber(int orderNumber)
         {
-            //--- Get the highest rownumber for specified order. ---
+            //--- Get the customer for specified ordernumber. ---
             return orders.OfType<OrderHeader>().Where(item => item.orderNumber == orderNumber).ToArray()[0].customerNumber;
         }
 
 
-        //====================================================================================================================================
-        // Insert Order.
-        //====================================================================================================================================
-        //public void InsertOrderHeader(int orderNumber, int customerNumber, string customerName)
-        public void InsertOrderHeader(T orderHeader)
+        //==================================================================================================================
+        // Get all orderheaders.
+        //==================================================================================================================
+        public List<OrderHeader> GetAllOrderHeaders()
         {
-            //OrderHeader orderHeader = new OrderHeader(orderNumber, customerNumber, customerName);
-            this.orders.Add(orderHeader);
+            //--- Get all orderheaders. ---
+            return orders.OfType<OrderHeader>().ToList();
         }
 
 
         //==================================================================================================================
-        // Add Order.
-        // Order is an orderrow with rownumber equal to 0. Rows from 1 and upwards contains the products in the order.
-        // Ordernumber is returned.
+        // Get orderheader for specific ordernumber.
         //==================================================================================================================
-        /*        public int AddOrderHeader(T orderHeader)
-                { 
-                    //--- Get next order number. ---
-                    int orderNumber = GetHighestOrderNumber() + 1;
+        public OrderHeader GetOrderHeaderByOrderNumber(int orderNumber)
+        {
+            //--- Get orderheader for specific ordernumber. ---
+            List<OrderHeader> orderHeaders = orders.OfType<OrderHeader>().Where(item => item.orderNumber == orderNumber).ToList();
+            if (orderHeaders.Count == 1)
+                return orderHeaders[0];
+            else
+                return null;
+        }
 
-                    //--- Add orderheader to orderlist. ---
-                    //InsertOrderHeader(orderNumber, customerNumber, customerName);
-                    //T orderHeader = new OrderHeader(orderNumber, customerNumber, customerName);
 
-
-                    return orderNumber;
-                }
-
-        */
         //==================================================================================================================
-        // Add Orderrow.
+        // Get orderheaders for specific customernumber.
         //==================================================================================================================
-        /*        public int AddOrderRow(int orderNumber, string productNumber, string productName, decimal productPrice, int quantity)
-                {
-                    //--- Get customer number for the current order. ---
-                    int customerNumber = GetCustomerNumberByOrderNumber(orderNumber);
+        public List<OrderHeader> GetOrderHeadersByCustomerNumber(int customerNumber)
+        {
+            //--- Get orderheader for specific customernumber. ---
+            return orders.OfType<OrderHeader>().Where(item => item.customerNumber == customerNumber).ToList();
+        }
 
-                    //--- Get next rownumber for the current order. ---
-                    int rowNumber = GetHighestRowNumber(orderNumber) + 1;
 
-                    //--- Add orderrow to orderlist. ---
-                    InsertOrderRow(orderNumber, customerNumber, rowNumber, productNumber, productName, productPrice, quantity);
+        //==================================================================================================================
+        // Get all orderrows for specific ordernumber.
+        //==================================================================================================================
+        public List<OrderRow> GetOrderRowsByOrderNumber(int orderNumber)
+        {
+            //--- Return all orderrows. ---
+            return orders.OfType<OrderRow>().Where(item => item.orderNumber == orderNumber).ToList();
 
-                    return rowNumber;
+        }
 
-                }
-        */
+
+        //==================================================================================================================
+        // Get specific orderrow for specific ordernumber.
+        //==================================================================================================================
+        public OrderRow GetOrderRowByOrderNumber(int orderNumber, int rowNumber)
+        {
+            //--- Return specific orderrow. ---
+            List<OrderRow> orderRows = orders.OfType<OrderRow>().Where(item => item.orderNumber == orderNumber && item.rowNumber == rowNumber).ToList();
+            if (orderRows.Count == 1)
+                return orderRows[0];
+            else
+                return null;
+
+        }
+
+
+        //==================================================================================================================
+        // Delete orderrow.
+        //==================================================================================================================
+        public bool DeleteOrderRow(OrderRow orderRow)
+        {
+            return false;
+        }
+
+
+        //==================================================================================================================
+        // Delete orderrow for specific ordernumber.
+        //==================================================================================================================
+        public bool DeleteOrderRow(int orderNumber, int rowNumber)
+        {
+            //--- If row exists, delete. ---
+            if (orders.OfType<OrderRow>().Where(item => item.orderNumber == orderNumber && item.rowNumber == rowNumber).Count() > 0)
+            {
+                orders.OfType<OrderRow>().Where(item => item.orderNumber == orderNumber && item.rowNumber == rowNumber);
+                return true;
+            }
+            else
+                return false;
+
+        }
+
     }
-
 
 }

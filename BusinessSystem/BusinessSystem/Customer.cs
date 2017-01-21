@@ -14,11 +14,13 @@ namespace BusinessSystem
         private string _address;
 
         public int number { get { return _number; } set { _number = value; } }
-        public string name { get { return _name; } }
-        public string address { get { return _address; } }
+        public string name { get { return _name; } set { _name = value; } }
+        public string address { get { return _address; } set { _address = value; } }
 
 
-        //--- Constructor ---
+        //--- Constructors ---
+        public Customer() { }
+
         public Customer(int number, string name, string address)
         {
             _number = number;
@@ -67,11 +69,11 @@ namespace BusinessSystem
         //====================================================================================================================================
         // Insert Customer
         //====================================================================================================================================
-        public void InsertCustomer(int customerNumber, string name, string address)
-        {
-            Customer customerNew = new Customer(customerNumber, name,address);
-            customers.Add(customerNew);
-        }
+        //public void InsertCustomer(int customerNumber, string name, string address)
+        //{
+        //    Customer customerNew = new Customer(customerNumber, name,address);
+        //    customers.Add(customerNew);
+        //}
 
 
         //===========================================================================================
@@ -80,13 +82,15 @@ namespace BusinessSystem
         public int AddCustomer(string name, string address)
         {
             //--- Make sure the customer not already in the customerlist. ---
-                if (GetCustomerByNameAddress(name, address).Length==0)
-                {
-                    //--- Get the highest customer number and set to new customer object. ---
-                    int customerNumber = GetCustomerHighestNumber() + 1;
+            if (GetCustomerByNameAddress(name, address).Count == 0)
+            {
+                //--- Get the highest customer number and set to new customer object. ---
+                int customerNumber = GetCustomerHighestNumber() + 1;
 
                 //--- Add customer. ---
-                InsertCustomer(customerNumber, name, address);
+                //InsertCustomer(customerNumber, name, address);
+                Customer customerNew = new Customer(customerNumber, name, address);
+                customers.Add(customerNew);
                 return customerNumber;
             }
             else
@@ -96,33 +100,46 @@ namespace BusinessSystem
         }
 
 
-       //===========================================================================================
+        //===========================================================================================
         // Get customer by number.
         //===========================================================================================
-        public Customer[] GetCustomerByNumber(int number)
+        public List<Customer> GetAllCustomer()
+        {
+            return customers;
+        }
+
+
+        //===========================================================================================
+        // Get customer by number.
+        //===========================================================================================
+        public Customer GetCustomerByNumber(int number)
         {
             //--- Select customer from customers list that corresponds to the given number. ---
-            return customers.Where(item => item.number == number).ToArray();
+            List<Customer> customersList = customers.Where(item => item.number == number).ToList();
+            if (customersList.Count == 1)
+                return customersList[0];
+            else
+                return null;
         }
 
 
         //===========================================================================================
         // Get customer by Name.
         //===========================================================================================
-        public Customer[] GetCustomerByName(string name)
+        public List<Customer> GetCustomerByName(string name)
         {
             //--- Select customer from customers list that corresponds to the given name. ---
-            return customers.Where(item => item.name.ToLower() == name.ToLower()).ToArray();
+            return customers.Where(item => item.name.ToLower() == name.ToLower()).ToList();
         }
 
 
         //===========================================================================================
         // Get customer by Address.
         //===========================================================================================
-        public Customer[] GetCustomerByAddress(string address)
+        public List<Customer> GetCustomerByAddress(string address)
         {
             //--- Select customer from customers list that corresponds to the given address. ---
-            return customers.Where(item => item.address.ToLower() == address.ToLower()).ToArray();
+            return customers.Where(item => item.address.ToLower() == address.ToLower()).ToList();
 
         }
 
@@ -130,10 +147,10 @@ namespace BusinessSystem
         //===========================================================================================
         // Get customer by Name and Address.
         //===========================================================================================
-        public Customer[] GetCustomerByNameAddress(string name,string address)
+        public List<Customer> GetCustomerByNameAddress(string name, string address)
         {
             //--- Select customer from customers list that corresponds to the given address. ---
-            return customers.Where(item => item.name.ToLower() == name.ToLower() && item.address.ToLower() == address.ToLower() ).ToArray();
+            return customers.Where(item => item.name.ToLower() == name.ToLower() && item.address.ToLower() == address.ToLower()).ToList();
 
         }
 
