@@ -189,7 +189,7 @@ namespace BusinessSystem
             }
             else
             {
-                message = "Customer not found!";
+                message = "Customer number must be integer and greater than 0!";
                 return null;
             }
         }
@@ -282,7 +282,7 @@ namespace BusinessSystem
                 else
                 {
                     Customer customer = customersObj.GetCustomerByNumber(customerNumberInt);
-                    if (customer != null)
+                    if (customer == null)
                     {
                         errorMessage = "Customer number does not exist!";
                     }
