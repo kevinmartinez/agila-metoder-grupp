@@ -117,7 +117,11 @@ namespace BusinessSystem
         public int GetHighestRowNumberByOrderNumber(int orderNumber)
         {
             //--- Get the highest rownumber for specified order. ---
-            return orders.OfType<OrderRow>().Where(item => item.orderNumber == orderNumber).Max(item => item.rowNumber);
+            List<OrderRow> orderrows = orders.OfType<OrderRow>().Where(item => item.orderNumber == orderNumber).ToList();
+            if (orderrows.Count > 0)
+                return orders.OfType<OrderRow>().Where(item => item.orderNumber == orderNumber).Max(item => item.rowNumber);
+            else
+                return 0;
         }
 
 
