@@ -66,15 +66,6 @@ namespace BusinessSystem
         }
 
 
-        //====================================================================================================================================
-        // Insert Customer
-        //====================================================================================================================================
-        //public void InsertCustomer(int customerNumber, string name, string address)
-        //{
-        //    Customer customerNew = new Customer(customerNumber, name,address);
-        //    customers.Add(customerNew);
-        //}
-
 
         //===========================================================================================
         // Add customer
@@ -88,7 +79,6 @@ namespace BusinessSystem
                 int customerNumber = GetCustomerHighestNumber() + 1;
 
                 //--- Add customer. ---
-                //InsertCustomer(customerNumber, name, address);
                 Customer customerNew = new Customer(customerNumber, name, address);
                 customers.Add(customerNew);
                 return customerNumber;

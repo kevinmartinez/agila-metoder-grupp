@@ -7,8 +7,8 @@
     <ProjectGuid>{A8A01CEC-4109-481C-8E42-FED09C8C5005}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BusinessSystem_Test</RootNamespace>
-    <AssemblyName>BusinessSystem_Test</AssemblyName>
+    <RootNamespace>BusinessSystem</RootNamespace>
+    <AssemblyName>BusinessSystem</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

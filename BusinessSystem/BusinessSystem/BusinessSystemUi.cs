@@ -62,16 +62,6 @@ namespace BusinessSystem
 
         private string PrintMainMenu()
         {
-            //string menuMessage = "Main menu. Select a number:"
-            //                      + "\n1. To register a new order."
-            //                      + "\n2. To remove an order."
-            //                      + "\n3. To update an order"
-            //                      + "\n4. To list all orders by customer."
-            //                      + "\n5. To change the number of products in store."
-            //                      + "\n6. To change the price of a product."
-            //                      + "\n7. To register a new product."
-            //                      + "\n8. To register a new customer"
-            //                      + "\n0. Exit the application.";
 
             string menuMessage = "Main menu. Select a number:"
                                   + "\n1. To register a new order."
@@ -129,26 +119,6 @@ namespace BusinessSystem
             Console.Clear();
             Console.WriteLine("\tNew order\n\t---------");
 
-            //Check for customer.
-            //do
-            //{
-            //    Console.WriteLine("\tEnter customer number (Enter-Quit): ");
-            //    customerNumber = Console.ReadLine();
-
-            //    //Quit if blank.
-            //    if (customerNumber == "")
-            //        return;
-
-            //    //Get customer.
-            //    Store.customerObj = Store.GetCustomerByNumber(customerNumber, out message);
-
-            //    if (Store.customerObj == null)
-            //    {
-            //        Console.Write("\t  Customer not found!");
-            //        Console.ReadKey();
-            //    }
-            //} while (Store.customerObj == null);
-
 
             //Input customernumber.
             customerNumber = InputCustomerNumber();
@@ -168,76 +138,7 @@ namespace BusinessSystem
             }
 
 
-            ////string result = Store.AddOrderHeader(input);
-            //string result = "";
-
-            //switch (result)
-            //{
-            //    case "Error":
-            //        Console.WriteLine("An error occurred, please try again. ");
-            //        break;
-            //    case "Customer number does not exist!":
-            //        Console.WriteLine(result);
-            //        break;
-            //    default:
-            //        //continue to add rows in order:
-            //        string message = "";
-            //        bool continueToAddRows = true;
-            //        do {
-            //            //AskForInputAndAddRowToOrder();
-
-            //            Console.WriteLine("Enter product number: ");
-            //            string inputProductNumber = Console.ReadLine();
-            //            while (inputProductNumber == "") {
-            //                Console.WriteLine("Product number cannot be empty. You must enter a valid product number please: ");
-            //                inputProductNumber = Console.ReadLine();
-            //            }
-            //            Console.WriteLine("Enter the number of products: ");
-            //string inputProductQuantity = Console.ReadLine();
-            //while (inputProductQuantity == "") {
-            //    Console.WriteLine("You must enter how many products you want to buy. Enter a number please: ");
-            //    inputProductQuantity = Console.ReadLine();
-            //}
-            //string rowResult = Store.AddOrderRow(result, inputProductNumber, inputProductQuantity, out message);
-            //if (message != "") {
-            //    Console.WriteLine(message);
-
-            //}
-            //if (rowResult != "0") {
-            //    Console.WriteLine("The row " + rowResult + " was added to the order.");
-            //}
-
-            //  continueToAddRows = CheckIfUserWillContinueToAddRows();
-            //    Console.Clear();
-            //} while (continueToAddRows);
-
-            //break;
-
-
-
         }
-
-        //===========================================================================================================================
-        //private bool CheckIfUserWillContinueToAddRows()
-        //{
-        //    Console.WriteLine("Do you want to continue adding rows in this order? (Y/N)");
-        //    string answer = Console.ReadLine();
-        //    while (answer == "")
-        //    {
-        //        Console.WriteLine("You must answer Y or N if you want to continue adding rows or not please.");
-        //        answer = Console.ReadLine();
-        //    }
-
-        //    if (answer.ToLower() == "y")
-        //    {
-        //        return true;
-        //    }
-        //    else
-        //    {
-        //        return false;
-        //    }
-
-        //}
 
 
         //===========================================================================================================================
@@ -571,7 +472,7 @@ namespace BusinessSystem
                     if (quantity == "") return "";
 
                     rowNumber = Store.AddOrderRow(orderNumber, productNumber, quantity, out message);
-                    if (rowNumber == "0")
+                    if (message != "")
                     {
                         Console.Write("\t" + message);
                         Console.ReadKey();
